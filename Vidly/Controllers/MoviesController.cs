@@ -28,7 +28,7 @@ namespace Vidly.Controllers
             var movies = _context.Movies.Include(m => m.Genre).ToList();
             return View(movies);
         }
-        public ActionResult Detail(int id)
+        public ActionResult Details(int id)
         {
           
             var movie = _context.Movies.Include(m => m.Genre).SingleOrDefault(m => m.Id == id);
