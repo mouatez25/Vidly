@@ -6,6 +6,7 @@ using System.Web.Mvc;
 using Vidly.Models;
 using System.Data.Entity;
 using Vidly.ViewModels;
+using System.Data.Entity.Validation;
 
 namespace Vidly.Controllers
 {
@@ -21,8 +22,73 @@ namespace Vidly.Controllers
         {
             _context.Dispose();
         }
+        public ViewResult New()
+        {
+            //we can just use this not define title in MovieFormViewModel
+            ///ViewBag.Title = "Edit Movie"
+            var genres = _context.Genres.ToList();
+            var viewModel = new MovieFormViewModel
+            {
+             //   Movie=new Movie(),
+                Genres = genres
+            };
+            return View("MovieForm", viewModel);
 
-        public ActionResult Index()
+        }
+        public ActionResult Edit(int id)
+        {
+            ///we can just use this not define title in MovieFormViewModel
+            ///ViewBag.Title = "Edit Movie"
+
+            var movie = _context.Movies.SingleOrDefault(c => c.Id == id);
+            if (movie == null)
+                return HttpNotFound();
+            var viewModel = new MovieFormViewModel(movie)
+            {
+             
+                Genres = _context.Genres.ToList()
+            };
+            return View("MovieForm", viewModel);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Save(Movie movie)
+        {
+            //first step datanotation in the model
+            //second !modelstate.isvalid
+            //add in view msg for
+            if (!ModelState.IsValid)
+            {
+                var viewModel = new MovieFormViewModel(movie)
+                {
+                   Genres= _context.Genres.ToList()
+                };
+                return View("MovieForm", viewModel);
+            }
+            if (movie.Id == 0)
+            {
+                movie.DateAdded = DateTime.Now;
+                _context.Movies.Add(movie);
+            }
+            else
+            {
+                var movieInDb = _context.Movies.Single(m => m.Id == movie.Id);
+                movieInDb.Name = movie.Name;
+                movieInDb.GenreId = movie.GenreId;
+                movieInDb.NumberInStock = movie.NumberInStock;
+                movieInDb.ReleaseDate = movie.ReleaseDate;
+            }
+            try
+            {
+                _context.SaveChanges();
+            }catch(DbEntityValidationException e)
+            {
+                Console.WriteLine(e);
+            }
+            return RedirectToAction("Index", "Movies");
+
+        }
+            public ActionResult Index()
         {
 
             var movies = _context.Movies.Include(m => m.Genre).ToList();

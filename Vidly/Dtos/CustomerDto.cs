@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
+using Vidly.Models;
 
-namespace Vidly.Models
+namespace Vidly.Dtos
 {
-    public class Customer
+    public class CustomerDto
     {
         public int Id { get; set; }
         // 
@@ -16,13 +17,14 @@ namespace Vidly.Models
         [StringLength(255)]
         public string Name { get; set; }
         public bool IsSubscribedToNewsLetter { get; set; }
-        public MembershipType MembershipType { get; set; }
-        [Display(Name = "Membership Type")]
+        //exclude because is dependancy domain
+        //public MembershipType MembershipType { get; set; }
+      //  [Display(Name = "Membership Type")]
         //implicitly required because byte not ?byte
         //entity framework recognizes this convention and treats
         //this property as a foreign key 
         public Byte MembershipTypeId { get; set; }
-        [Display(Name ="Date of Birth")]
+    //because is for the form    [Display(Name = "Date of Birth")]
         [Min18YearsIfAMember]
         public DateTime? Birthdate { get; set; }
     }

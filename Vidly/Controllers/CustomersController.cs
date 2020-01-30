@@ -17,7 +17,7 @@ namespace Vidly.Controllers
         {
             _context = new ApplicationDbContext();
         }
-        protected override void Dispose(bool disposing)
+        protected void Dispose(bool disposing)
         {
             base.Dispose(disposing);
             _context.Dispose();
@@ -27,13 +27,30 @@ namespace Vidly.Controllers
             var membershipTypes = _context.MembershipTypes.ToList();
             var viewModel = new CustomerFormViewModel
             {
+                //we initialise customer because we used validationsumary 
+                //and we can have en error for the new record which has id empty string
+                //and asp.net does not know how to convert it to integer =0
+                Customer = new Customer(),
                 MembershipTypes = membershipTypes
             };
             return View("CustomerForm",viewModel);
         }
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Save(Customer customer)
         {
+            //first step datanotation in the model
+            //second !modelstate.isvalid
+            //add in view msg for
+            if(!ModelState.IsValid)
+            {
+                var viewModel = new CustomerFormViewModel
+                {
+                    Customer = customer,
+                    MembershipTypes = _context.MembershipTypes.ToList()
+                };
+                return View("CustomerForm", viewModel);
+            }
             if(customer.Id==0)
             {
                 _context.Customers.Add(customer);
@@ -67,6 +84,8 @@ namespace Vidly.Controllers
         // GET: Customers
         public ViewResult Index()
         {
+            //this methods we can load customers and its related object 
+            //to display with customer
             var customers = _context.Customers.Include(c => c.MembershipType).ToList();
             return View(customers);
          }
