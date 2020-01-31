@@ -89,9 +89,8 @@ namespace Vidly.Controllers.Api
         {
             var customerInDb = _context.Customers.SingleOrDefault(c => c.Id == id);
             if (customerInDb == null)
-                //    throw new HttpResponseException(HttpStatusCode.NotFound);
                 return NotFound();
-                _context.Customers.Remove(customerInDb);
+            _context.Customers.Remove(customerInDb);
             _context.SaveChanges();
             return Ok();
         }
