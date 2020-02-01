@@ -10,6 +10,7 @@ using AutoMapper;
 
 namespace Vidly.Controllers
 {
+    [Authorize]
     public class CustomersController : Controller
     {
         private ApplicationDbContext _context;
@@ -81,6 +82,7 @@ namespace Vidly.Controllers
         };
             return View("CustomerForm",viewModel);
         }
+        
         // GET: Customers
         public ViewResult Index()
         {
