@@ -86,9 +86,10 @@ namespace Vidly.Controllers
         {
             //this methods we can load customers and its related object 
             //to display with customer
-            var customers = _context.Customers.Include(c => c.MembershipType).ToList();
-            return View(customers);
-         }
+    //        var customers = _context.Customers.Include(c => c.MembershipType).ToList();
+     //       return View(customers);
+            return View();
+        }
         public ActionResult Details(int id)
         {
             var customer = _context.Customers.Include(c => c.MembershipType).SingleOrDefault(c => c.Id == id);

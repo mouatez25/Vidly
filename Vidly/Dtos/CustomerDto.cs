@@ -24,9 +24,11 @@ namespace Vidly.Dtos
         //entity framework recognizes this convention and treats
         //this property as a foreign key 
         public Byte MembershipTypeId { get; set; }
-    //because is for the form    [Display(Name = "Date of Birth")]
-   //     [Min18YearsIfAMember] because the control is on customer
-   //and with automaper the customertdo is affected on customer
+        public MembershipTypeDto MembershipType { get; set; }
+
+        //because is for the form    [Display(Name = "Date of Birth")]
+         //     [Min18YearsIfAMember] because the control is on customer
+        //and with automaper the customertdo is affected on customer
         public DateTime? Birthdate { get; set; }
     }
 }
