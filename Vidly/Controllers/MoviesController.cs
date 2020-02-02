@@ -38,6 +38,7 @@ namespace Vidly.Controllers
             return View("MovieForm", viewModel);
 
         }
+        [Authorize(Roles = RoleName.CanManageMovies)]
         public ActionResult Edit(int id)
         {
             ///we can just use this not define title in MovieFormViewModel
@@ -55,6 +56,7 @@ namespace Vidly.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = RoleName.CanManageMovies)]
         public ActionResult Save(Movie movie)
         {
             //first step datanotation in the model
