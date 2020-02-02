@@ -10,6 +10,7 @@ using System.Data.Entity.Validation;
 
 namespace Vidly.Controllers
 {
+   // [Authorize]
     public class MoviesController : Controller
     {
         private ApplicationDbContext _context;
@@ -22,6 +23,7 @@ namespace Vidly.Controllers
         {
             _context.Dispose();
         }
+        
         [Authorize(Roles =RoleName.CanManageMovies)]
         public ViewResult New()
         {
